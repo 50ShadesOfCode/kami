@@ -1,0 +1,31 @@
+os: linux
+dist: trusty
+language: rust
+
+env:
+  global:
+    - CRATE_NAME=kami
+
+jobs:
+  include:
+    - env: TARGET=aarch64-unknown-linux-gnu
+    - env: TARGET=x86_64-pc-windows-gnu
+    - env: TARGET=x86_64-unknown-linux-gnu
+      rust: nightly
+
+before_install:
+  - rustup self update
+
+deploy:
+  token:
+    secure: "Z4ssyhgsDdpXgCPG6hNvZUTQ5ONaJIYnbblR5STY/c/xO5JJyt8zpU0AyNowagxyaAW5ZU3z9j4s1JqaiJ+HqUo0yInmaD2f45CEUx62JRp0PtGZraTnbDjZQ/6usG6iLpQLhmXesUrz/2VEcCUHZ4/Dn2eiDOb/X6BXfwiXBGcLyTRk69Lhuk/QbOJAnlybDqLnV/vm+74qblp0Ro88GXp9zZIzt4wapeaWQwiaT+jJEM8UhXYhBTygxx5mLd+DfyuEBfqaVPORBbfLNXI/lOBoO6V2cnYrG2NIFbXoQ1eGSR9sFRZ+pRHLtEptyop6ODUauEJmJvWQdI9m4nK0nbCJ1LxERUkM6ioSgLIZXvsySk5QzkLqJY7QwYgPcp2kiv0QkwOVrW4WZWaDXTAdefy2iVVaZjGFYdoTMZjdt6wLB8nTjeTGJyF9kT3K4HPfeceaKCE/3X52skMGGREfls9vty7SYB/y1EniiFUfZws7FUtP7ecCd0cys6Ep7TxbIa0/pA2L2jCTmNYMtYoM0DVIM7/s6L38ebQ92YCmb1wIB9emADEtfkWeYlBvULEYcNygbqq/fOPdWgEbtZHDeUY0YVbU4fJn9ezPYe9DTV/bgWEtvW8M7qmpEq8Wqj7TNi044GRD97pgmUNbRWlXd2bomKEL5tV7ZDadlxQJx24="
+  file_glob: true
+  file: $CRATE_NAME-$TRAVIS_TAG-$TARGET.*
+  provider: releases
+  cleanup: true
+  on:
+    branch: master
+    condition: $TRAVIS_RUST_VERSION = stable
+    tags: true
+
+cache: cargo
